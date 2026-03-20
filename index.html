@@ -19,6 +19,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
       }
       body {
         min-height: 100vh;
@@ -408,7 +409,11 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+        background: linear-gradient(
+          135deg,
+          var(--rose),
+          var(--rose-dark)
+        ) !important;
         border: none;
         color: white;
         font-size: 14px;
@@ -423,7 +428,8 @@
         flex-shrink: 0;
         -webkit-appearance: none;
         appearance: none;
-        outline: none;
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent;
       }
       .btn-play:hover {
         transform: scale(1.1);
@@ -431,9 +437,14 @@
       }
       .btn-play:focus,
       .btn-play:active {
-        background: linear-gradient(135deg, var(--rose), var(--rose-dark));
-        outline: none;
-        box-shadow: 0 4px 16px rgba(232, 85, 109, 0.4);
+        background: linear-gradient(
+          135deg,
+          var(--rose),
+          var(--rose-dark)
+        ) !important;
+        outline: none !important;
+        box-shadow: 0 4px 16px rgba(232, 85, 109, 0.4) !important;
+        -webkit-tap-highlight-color: transparent;
       }
       .btn-main {
         display: inline-flex;
@@ -586,7 +597,6 @@
     <div class="cursor-trail" id="cursorTrail"></div>
     <canvas id="particles"></canvas>
 
-    <!-- Splash Screen -->
     <div id="splash" onclick="openCard()">
       <span class="splash-envelope">💌</span>
       <p class="splash-title">Ada sesuatu untukmu</p>
@@ -597,7 +607,6 @@
       </p>
     </div>
 
-    <!-- Audio lokal -->
     <audio id="bgMusic" loop>
       <source src="music.mp4" type="video/mp4" />
     </audio>
@@ -741,8 +750,6 @@
           }),
         );
       }
-
-      // timer dimulai saat openCard()
 
       // ---- Particles ----
       const canvas = document.getElementById("particles");
