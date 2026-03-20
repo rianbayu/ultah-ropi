@@ -710,30 +710,37 @@
       });
 
       // ---- Music ----
-      const audio = document.getElementById("bgMusic");
-      const playBtn = document.getElementById("playBtn");
-      const waveBars = [1, 2, 3, 4, 5].map((i) =>
-        document.getElementById("wb" + i),
-      );
-      let playing = false;
+      // ---- Music ----
+const audio = document.getElementById("bgMusic");
+const playBtn = document.getElementById("playBtn");
+const waveBars = [1, 2, 3, 4, 5].map((i) =>
+  document.getElementById("wb" + i),
+);
+let playing = false;
 
-      function togglePlay() {
-        if (playing) {
-          audio.pause();
-          playing = false;
-          playBtn.textContent = "▶";
-          waveBars.forEach((b) => b.classList.remove("active"));
-        } else {
-          audio
-            .play()
-            .then(() => {
-              playing = true;
-              playBtn.textContent = "⏸";
-              waveBars.forEach((b) => b.classList.add("active"));
-            })
-            .catch(() => {});
-        }
-      }
+function startMusic() {
+  if (playing) return;
+  audio.play().then(() => {
+    playing = true;
+    playBtn.textContent = "⏸";
+    waveBars.forEach((b) => b.classList.add("active"));
+  }).catch(() => {});
+}
+
+// Autoplay saat user pertama kali klik/tap di mana saja
+document.addEventListener("click", startMusic, { once: true });
+document.addEventListener("touchstart", startMusic, { once: true });
+
+function togglePlay() {
+  if (playing) {
+    audio.pause();
+    playing = false;
+    playBtn.textContent = "▶";
+    waveBars.forEach((b) => b.classList.remove("active"));
+  } else {
+    startMusic();
+  }
+}
 
       // ---- Confetti ----
       function confettiBurst(btn) {
