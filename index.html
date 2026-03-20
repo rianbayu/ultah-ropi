@@ -145,8 +145,9 @@
       // ---- Splash ----
       function openCard() {
         document.getElementById("splash").classList.add("hide");
-        // Kembalikan scroll setelah splash hilang
         document.body.style.overflow = "auto";
+        timer = setInterval(next, INTERVAL);
+        resetProgress();
         audio.play().then(() => {
           playing = true;
           playBtn.textContent = "⏸";
@@ -207,8 +208,7 @@
         }));
       }
 
-      timer = setInterval(next, INTERVAL);
-      resetProgress();
+      // timer dimulai saat openCard()
 
       // ---- Particles ----
       const canvas = document.getElementById("particles");
