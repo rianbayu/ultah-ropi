@@ -347,7 +347,7 @@
         gap: 14px;
         margin-bottom: 28px;
         animation: fadeUp 0.6s 0.95s both;
-        cursor: none;
+        cursor: pointer;
       }
       .player-info {
         flex: 1;
@@ -415,7 +415,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: none;
+        cursor: pointer;
         transition:
           transform 0.2s,
           box-shadow 0.2s;
@@ -439,7 +439,7 @@
         font-size: 16px;
         font-style: italic;
         letter-spacing: 0.5px;
-        cursor: none;
+        cursor: pointer;
         transition:
           transform 0.2s,
           box-shadow 0.2s;
@@ -500,6 +500,11 @@
     <div class="cursor-trail" id="cursorTrail"></div>
     <canvas id="particles"></canvas>
 
+    <!-- Audio lokal -->
+    <audio id="bgMusic" loop>
+      <source src="music.m4a" type="audio/mp4" />
+    </audio>
+
     <div class="scene">
       <div class="card">
         <span class="ornament tl">❧</span>
@@ -544,40 +549,6 @@
       </div>
     </div>
 
-    <!-- YouTube iframe tersembunyi -->
-    <div
-      style="
-        position: fixed;
-        bottom: -9999px;
-        left: -9999px;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        pointer-events: none;
-      "
-    >
-      <iframe
-        id="yt-iframe"
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/sDMgDl95a-M?si=rf_uL_SJ5b1t7V6Z&autoplay=1&loop=1&playlist=sDMgDl95a-M"
-        title="YouTube video player"
-        frameborder="0"
-        allow="
-          accelerometer;
-          autoplay;
-          clipboard-write;
-          encrypted-media;
-          gyroscope;
-          picture-in-picture;
-          web-share;
-        "
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
-      </iframe>
-    </div>
-
     <script>
       // ---- Slides ----
       const slides = [
@@ -617,7 +588,6 @@
         dot.className = "dot" + (i === 0 ? " active" : "");
         dot.addEventListener("click", () => {
           goTo(i);
-          // reset timer agar tidak loncat setelah diklik
           clearInterval(timer);
           timer = setInterval(next, INTERVAL);
         });
@@ -629,7 +599,6 @@
         const allDots = dotsEl.querySelectorAll(".dot");
         const prev = current;
         current = (n + slides.length) % slides.length;
-
         allSlides[prev].classList.add("exit");
         setTimeout(
           () => allSlides[prev].classList.remove("active", "exit"),
@@ -641,7 +610,6 @@
             d.classList.toggle("active", i === current),
           );
         }, 750);
-
         resetProgress();
       }
 
@@ -742,24 +710,29 @@
       });
 
       // ---- Music ----
+      const audio = document.getElementById("bgMusic");
       const playBtn = document.getElementById("playBtn");
       const waveBars = [1, 2, 3, 4, 5].map((i) =>
         document.getElementById("wb" + i),
       );
       let playing = false;
 
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          playing = true;
-          playBtn.textContent = "♪";
-          waveBars.forEach((b) => b.classList.add("active"));
-        }, 1500);
-      });
-
       function togglePlay() {
-        alert(
-          "🎵 Lagu diputar otomatis saat halaman dibuka.\nJika belum terdengar, pastikan browser mengizinkan autoplay.",
-        );
+        if (playing) {
+          audio.pause();
+          playing = false;
+          playBtn.textContent = "▶";
+          waveBars.forEach((b) => b.classList.remove("active"));
+        } else {
+          audio
+            .play()
+            .then(() => {
+              playing = true;
+              playBtn.textContent = "⏸";
+              waveBars.forEach((b) => b.classList.add("active"));
+            })
+            .catch(() => {});
+        }
       }
 
       // ---- Confetti ----
@@ -794,6 +767,9 @@
         const heart = document.getElementById("mainHeart");
         heart.textContent = "❤️";
         setTimeout(() => (heart.textContent = "🤍"), 2500);
+
+        // Auto play saat confetti
+        if (!playing) togglePlay();
       }
     </script>
   </body>
